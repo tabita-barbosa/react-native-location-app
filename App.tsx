@@ -7,7 +7,7 @@ import { getCurrentPositionAsync,
 import { View } from 'react-native';
 import { styles } from './styles';
 import { useEffect, useRef, useState } from 'react';
-import MapView, { Marker, MarkerAnimated } from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 
 export default function App() {
   const [location, setLocation] = useState<LocationObject | null>(null);
@@ -35,12 +35,10 @@ export default function App() {
       (response) => {
         setLocation(response);
         mapRef.current?.animateCamera({
+          pitch: 50,
           center: response.coords,
           altitude: 200,
-        },
-        { duration: 1000 }
-        );
-        });
+        })
       }
     );
   }, []);
@@ -48,6 +46,7 @@ export default function App() {
   return ( <View style={styles.container}>
     {location && (
       <MapView
+        ref={mapRef}
         style={styles.map}
         initialRegion={{
           latitude: location.coords.latitude,
